@@ -1,5 +1,6 @@
 owner:
-  can change a user into an admin
+  can change a user into an admin \
+  and vice versa
   can ban a user or admin
   can delete any event
   can delete any email template
@@ -10,6 +11,11 @@ owner:
   can send emails to specific people \
   or all people on the email list
   can remove user from email list
+  can view users
+  can view email list
+  can view email templates
+  can view events
+  cannot edit their own account
   cannot delete their account
 
 admin:
@@ -23,16 +29,43 @@ admin:
   can send emails to specific people \
   or all people on the email list
   can remove user from email list
+  can view users
+  can view email list
+  can view email templates
+  can view events
+  cannot edit their own accoun
   cannot delete their account
 
 user:
   can view events
+  can view users
+  cannot view, create, edit the email list
+  cannot view, create, edit any email templates
   can register for an event
   can unregister for an event
-  can subcribe to email list
+  can subscribe to email list
   can unsubscribe to email list
+  can verify email
+  can edit their own account
   can create account
   can delete account
+
+todo//
+  add routing for email native login \
+  - email verification codes
+  - pending user creation
+  define the respective tables mentioned
+
+http_routes//
+  /users    
+
+  /email_list
+
+  /email_templates
+
+  /auth
+
+  /events
 
 notes//
   a join table between users and their emails would be useful \
@@ -46,6 +79,9 @@ notes//
 
 packages//
   use joi schemas for data validation
+  use resend for native email verification \
+  and general email sending
+  use redis bull for queue functionality
 
 middleware//
   check if someone is an admin, owner, or regular user
@@ -81,3 +117,57 @@ app//
   emails using our mail list which users are automatically \
   invited to join upon signup, so like an onboarding thing \
   we might use a boolean for that actually
+
+  possible_database_tables//
+    notes///
+      member is the default for a user just signing up
+
+    const createUserTableQuery = `
+    CREATE TABLE IF NOT EXISTS users (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      role VARCHAR(20) CHECK (role IN ('owner', 'admin', 'member')) NOT NULL,
+      google_id VARCHAR(255),
+      github_id VARCHAR(255),
+      email VARCHAR(255) UNIQUE NOT NULL,
+      first_name VARCHAR(100),
+      last_name VARCHAR(100),
+      user_name VARCHAR(50) UNIQUE,
+      icon_url TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      is_subscribed_to_emails BOOLEAN DEFAULT FALSE,
+      is_onboarded BOOLEAN DEFAULT FALSE
+    );
+  `;
+
+  const createEventTableQuery = `
+    CREATE TABLE IF NOT EXISTS events (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      name VARCHAR(255) NOT NULL,
+      details TEXT,
+      cover_image_url TEXT,
+      posted_by UUID NOT NULL REFERENCES users(id) ON DELETE SET NULL,
+      latitude DECIMAL(9, 6),
+      longitude DECIMAL(9, 6),
+      date DATE NOT NULL,
+      start_time TIME NOT NULL,
+      end_time TIME NOT NULL,
+      address TEXT,
+      people_going INTEGER DEFAULT 0,
+      type VARCHAR(20) CHECK (type IN ('in-person', 'virtual')) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+
+  const createEmailTemplateTableQuery = `
+    CREATE TABLE IF NOT EXISTS email_templates (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      template_name VARCHAR(255) NOT NULL,
+      subject VARCHAR(255) NOT NULL,
+      html_content TEXT NOT NULL,
+      created_by UUID NOT NULL REFERENCES users(id) ON DELETE SET NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `;

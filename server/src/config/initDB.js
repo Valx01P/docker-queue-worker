@@ -14,7 +14,8 @@ const initDB = async () => {
       icon_url TEXT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      is_subscribed_to_emails BOOLEAN DEFAULT FALSE
+      is_subscribed_to_emails BOOLEAN DEFAULT FALSE,
+      is_onboarded BOOLEAN DEFAULT FALSE
     );
   `;
 

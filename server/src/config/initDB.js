@@ -50,23 +50,10 @@ const initDB = async () => {
     );
   `;
 
-  const createScheduledEmailTableQuery = `
-    CREATE TABLE IF NOT EXISTS scheduled_emails (
-      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      template_id UUID NOT NULL REFERENCES email_templates(id) ON DELETE SET NULL,
-      send_to_some BOOLEAN DEFAULT FALSE,
-      send_to_all BOOLEAN DEFAULT FALSE,
-      is_sent BOOLEAN DEFAULT FALSE,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-  `;
-
   try {
     await pool.query(createUserTableQuery);
     await pool.query(createEventTableQuery);
     await pool.query(createEmailTemplateTableQuery);
-    await pool.query(createScheduledEmailTableQuery);
     console.log("Database initialized successfully!");
   } catch (error) {
     console.error("Error initializing database:", error);

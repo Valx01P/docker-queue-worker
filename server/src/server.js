@@ -3,8 +3,6 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import authRoutes from './routes/authRoutes.js'
 import userRoutes from './routes/userRoutes.js'
-import adminRoutes from './routes/adminRoutes.js'
-import ownerRoutes from './routes/ownerRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
 import emailTemplateRoutes from './routes/emailTemplateRoutes.js'
 import dotenv from 'dotenv'
@@ -25,8 +23,6 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('auth', authRoutes)
 app.use('users', userRoutes)
-app.use('admins', adminRoutes)
-app.use('owners', ownerRoutes)
 app.use('events', eventRoutes)
 app.use('email_templates', emailTemplateRoutes)
 

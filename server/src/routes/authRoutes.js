@@ -3,8 +3,8 @@ import authController from '../controllers/authController.js'
 
 const router = express.Router()
 
-// Native auth routes
-router.post('/signup', authController.signup)
+// Native auth routes (email and password)
+router.post('/signup', authController.signup) // update so this creates a pending user that is verified in the email code routes
 router.post('/login', authController.login)
 
 // OAuth routes

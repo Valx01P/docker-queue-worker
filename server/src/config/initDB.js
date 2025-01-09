@@ -1,5 +1,10 @@
 import { pool } from './database.js';
 
+// todos:
+// add tables for the verification codes, pending users, and email list
+// update the user table to include banned users and some other properties
+// update all other tables accordingly
+
 const initDB = async () => {
   const createUserTableQuery = `
     CREATE TABLE IF NOT EXISTS users (

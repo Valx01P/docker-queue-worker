@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 
 dotenv.config({ path: '../.env' })
 
+// todo: just use the database url
+
 const config = {
     database: process.env.PGDATABASE,
     host: process.env.PGHOST,

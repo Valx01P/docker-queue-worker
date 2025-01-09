@@ -8,6 +8,10 @@ import emailTemplateRoutes from './routes/emailTemplateRoutes.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
+// todos:
+// update literally all of this for the routes and
+// also add a bunch of external middleware for security stuff lol
+
 const app = express()
 
 app.use(cors({
